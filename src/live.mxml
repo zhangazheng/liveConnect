@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:local="*"
+					   creationComplete="complete(event)">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			protected var lc:LiveConnect;
+			private var cameraName:String;
+			private function getCamera():void
+			{
+				var list:Array = Camera.names;
+				for(var i:int = 0;i<list.length;i++) 
+				{
+					var tmp:String  = list[i].toString();
+					trace(tmp);
+					if(tmp.indexOf("USB")!= -1) 
+					{
+						cameraName = tmp;
+					}
+				}
+			}
+			public function initApp():void
+			{
+				var uc:UIComponent = new UIComponent();
+				uc.addChild(lc);
+				container.addElement(uc);
+				lc.updateHost("192.168.1.184");
+				lc.upload("flex");
+				lc.playVideo("USBPC");
+			}
+			
+			protected function complete(event:FlexEvent):void
+			{
+				lc = new LiveConnect(200,200);
+				getCamera();
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Group id="container" x="175" y="50" width="418" height="339">
+		<s:Button width="105" height="59" label="go live" click="initApp()">
+			
+		</s:Button>
+	</s:Group>
+	
+</s:WindowedApplication>
